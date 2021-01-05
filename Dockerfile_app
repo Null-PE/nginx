@@ -1,0 +1,16 @@
+FROM openjdk:11
+# jarファイルを指定、containerの中へコピー
+
+COPY ./mySpringApp /project
+RUN apt-get update && apt-get install -y unzip
+WORKDIR /gradle
+RUN curl -L https://services.gradle.org/distributions/gradle-6.7.1-bin.zip -o gradle-6.7.1-bin.zip
+RUN unzip gradle-6.7.1-bin.zip
+
+ENV GRADLE_HOME=/gradle/gradle-6.7.1
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+RUN cd /project && gradle build
+
+# containerと共にjarファイルを実行する
+ENTRYPOINT ["java","-jar","myApp-0.1.0.jar"]

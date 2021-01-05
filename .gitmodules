@@ -1,0 +1,3 @@
+[submodule "mySpringApp"]
+	path = mySpringApp
+	url = git@github.com:Null-PE/mySpringApp.git

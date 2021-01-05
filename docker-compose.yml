@@ -1,9 +1,38 @@
 version: '3'
 
+networks:
+  myApp:
+
 services:
   nginx:
-    build: .
+    build: Dockerfile
     ports:
       - "8080:80"
+    networks:
+      - myApp
     volumes:
       - ./public:/usr/share/nginx/html
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile_app
+    container_name: my_app
+    ports:
+      - "8081:8081"
+    networks:
+      - myApp
+        #    command: java -jar /project/build/libs/myApp-0.1.0.jar
+
+  db:
+    image: mysql
+    container_name: my_db
+    volumes:
+      - ./db/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: MYSQLDB
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: myPassword
+    networks:
+      - myApp
